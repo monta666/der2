@@ -1,0 +1,230 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>DerjaBiz – Gérez votre stock, vos ventes et vos prix à la voix, en derja</title>
+<meta name="description" content="DerjaBiz automatise les commerces tunisiens : stock, ventes et prix par simple commande vocale en derja.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:wght@500;700;800&family=Cairo:wght@400;600;700&display=swap" rel="stylesheet">
+<style>
+:root{--bg:#F4F7F9;--surface:#fff;--ink:#101B2B;--mute:#55657A;--blue:#1B4F9C;--blue-ink:#fff;--red:#C8302A;--sand:#E6DFCF;--line:#D5DDE5;--ok:#1E7A4B;
+--h:"Bricolage Grotesque","Segoe UI",system-ui,sans-serif;--b:"Cairo","Segoe UI",system-ui,sans-serif;
+box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}
+@media (prefers-color-scheme:dark){:root:not([data-theme="light"]){--bg:#0C1522;--surface:#142034;--ink:#EAF0F7;--mute:#9BAABD;--blue:#6FA3F0;--blue-ink:#0C1522;--red:#FF6B5F;--sand:#2A3040;--line:#263650;--ok:#58C98C}}
+:root[data-theme="dark"]{--bg:#0C1522;--surface:#142034;--ink:#EAF0F7;--mute:#9BAABD;--blue:#6FA3F0;--blue-ink:#0C1522;--red:#FF6B5F;--sand:#2A3040;--line:#263650;--ok:#58C98C}
+html{scroll-padding-top:env(safe-area-inset-top,0px);scroll-behavior:smooth}
+*,*::before,*::after{box-sizing:border-box}
+body{margin:0;background:var(--bg);color:var(--ink);font:400 1.0625rem/1.6 var(--b)}
+a{color:inherit}
+:focus-visible{outline:3px solid var(--blue);outline-offset:2px}
+.wrap{width:min(1120px,100% - 2.5rem);margin-inline:auto}
+header.top{display:flex;align-items:center;justify-content:space-between;gap:1rem;padding:1.1rem 0}
+.logo{font:800 1.5rem var(--h);text-decoration:none;letter-spacing:-.02em}
+.logo i{font-style:normal;color:var(--blue)}
+nav a{margin-left:1.4rem;text-decoration:none;color:var(--mute);font-weight:600}
+nav a:hover{color:var(--ink)}
+.hero{display:grid;grid-template-columns:1fr 1.15fr;gap:3rem;align-items:start;padding:2.5rem 0 4.5rem}
+h1{font:800 clamp(2.4rem,5vw,3.9rem)/1.02 var(--h);letter-spacing:-.03em;margin:0 0 1.2rem}
+.lead{color:var(--mute);max-width:34rem;margin:0 0 1.6rem;font-size:1.15rem}
+.btn{display:inline-flex;align-items:center;min-height:48px;padding:.6rem 1.4rem;border-radius:999px;background:var(--blue);color:var(--blue-ink);font:700 1rem var(--b);text-decoration:none;border:0;cursor:pointer}
+.btn.alt{background:transparent;color:var(--ink);border:2px solid var(--line);margin-left:.6rem}
+.demo{background:var(--surface);border:2px solid var(--ink);border-radius:20px;padding:1.2rem;box-shadow:8px 8px 0 var(--blue)}
+.demo h2{font:700 1rem var(--h);margin:0 0 .8rem;color:var(--mute)}
+.cmd{display:flex;gap:.5rem}
+.cmd input{flex:1;min-width:0;min-height:52px;border:2px solid var(--line);border-radius:12px;padding:0 .9rem;font:600 1.1rem var(--b);background:var(--bg);color:var(--ink)}
+.mic{width:52px;height:52px;border-radius:50%;border:0;background:var(--red);color:#fff;cursor:pointer;font-size:1.3rem;flex:none}
+.mic.on{animation:pulse 1s infinite}
+@keyframes pulse{50%{box-shadow:0 0 0 10px rgba(200,48,42,.25)}}
+.go{min-height:52px;padding:0 1.1rem;border-radius:12px;border:0;background:var(--ink);color:var(--bg);font:700 1rem var(--b);cursor:pointer}
+.chips{display:flex;flex-wrap:wrap;gap:.45rem;margin:.8rem 0}
+.chips button{border:1px solid var(--line);background:var(--bg);color:var(--ink);border-radius:999px;padding:.3rem .8rem;font:600 .95rem var(--b);cursor:pointer;min-height:40px}
+.chips button:hover{border-color:var(--blue)}
+#msg{min-height:3.2rem;margin:.2rem 0 .8rem;padding:.6rem .8rem;border-radius:10px;background:var(--sand);font-weight:600}
+#msg.ok{border-left:5px solid var(--ok)}#msg.err{border-left:5px solid var(--red)}
+.tw{overflow-x:auto}
+table{width:100%;border-collapse:collapse}
+th,td{text-align:left;padding:.5rem .4rem;border-bottom:1px solid var(--line);white-space:nowrap}
+th{font-weight:600;color:var(--mute);font-size:.9rem}
+td.low{color:var(--red);font-weight:700}
+tr.flash td{background:var(--sand)}
+.foot{display:flex;justify-content:space-between;align-items:center;margin-top:.8rem;gap:1rem;flex-wrap:wrap}
+.foot b{font:700 1.2rem var(--h)}
+.foot button{background:none;border:0;color:var(--mute);text-decoration:underline;cursor:pointer;font:inherit;min-height:40px}
+section.s{padding:4.5rem 0;border-top:1px solid var(--line)}
+h2.t{font:800 clamp(1.8rem,3.5vw,2.6rem)/1.1 var(--h);letter-spacing:-.02em;margin:0 0 2rem;max-width:30rem}
+.steps{list-style:none;margin:0;padding:0;display:grid;grid-template-columns:repeat(3,1fr);gap:2rem;counter-reset:s}
+.steps li{counter-increment:s;padding-top:1rem;border-top:4px solid var(--blue)}
+.steps li::before{content:counter(s);font:800 2.2rem var(--h);color:var(--blue)}
+.steps h3,.rows h3{font:700 1.25rem var(--h);margin:.2rem 0 .4rem}
+.steps p{margin:0;color:var(--mute)}
+.rows{display:grid;gap:0}
+.row{display:grid;grid-template-columns:11rem 1fr 1fr;gap:1.5rem;padding:1.3rem 0;border-bottom:1px solid var(--line);align-items:baseline}
+.row h3{margin:0}
+.say{font:700 1.3rem var(--b)}
+.say small{display:block;font:500 .95rem var(--b);color:var(--mute);direction:ltr}
+.res{color:var(--mute)}
+.who{font:700 clamp(1.4rem,2.6vw,2rem)/1.35 var(--h);max-width:46rem;margin:0}
+.cta{background:var(--blue);color:var(--blue-ink);border-radius:24px;padding:3rem;display:flex;gap:2rem;justify-content:space-between;align-items:center;flex-wrap:wrap}
+.cta h2{font:800 clamp(1.7rem,3.2vw,2.4rem)/1.1 var(--h);margin:0 0 .5rem}
+.cta p{margin:0;opacity:.9}
+.cta .btn{background:var(--blue-ink);color:var(--blue)}
+.cta .btn.alt{background:transparent;color:var(--blue-ink);border-color:currentColor}
+footer{padding:2.5rem 0 3rem;color:var(--mute);font-size:.95rem}
+@media (max-width:860px){.hero{grid-template-columns:1fr;gap:2rem}.steps{grid-template-columns:1fr}.row{grid-template-columns:1fr;gap:.4rem}.cta{padding:2rem}nav a:not(:last-child){display:none}}
+@media (prefers-reduced-motion:reduce){.mic.on{animation:none}html{scroll-behavior:auto}}
+</style>
+</head>
+<body>
+<div class="wrap">
+<header class="top">
+  <a class="logo" href="#" aria-label="DerjaBiz">Derja<i>Biz</i></a>
+  <nav><a href="#comment">Comment ça marche</a><a href="#phrases">Ce que vous pouvez dire</a><a href="#contact">Contact</a></nav>
+</header>
+
+<main>
+<section class="hero">
+  <div>
+    <h1>Parlez en derja. Votre commerce s’occupe du reste.</h1>
+    <p class="lead">DerjaBiz met à jour votre stock, enregistre vos ventes et change vos prix sur simple commande vocale, dans la langue que vous parlez au quotidien.</p>
+    <a class="btn" href="#contact">Demander une démo</a><a class="btn alt" href="#comment">Voir comment ça marche</a>
+  </div>
+
+  <div class="demo" aria-labelledby="dt">
+    <h2 id="dt">Essayez maintenant : appuyez sur le micro ou écrivez</h2>
+    <div class="cmd">
+      <button class="mic" id="mic" type="button" aria-label="Parler">🎙</button>
+      <input id="inp" type="text" dir="auto" placeholder="زيد 20 كيلو طماطم" aria-label="Commande en derja" autocomplete="off">
+      <button class="go" id="go" type="button">Envoyer</button>
+    </div>
+    <div class="chips" id="chips"></div>
+    <div id="msg" role="status" aria-live="polite">Dites une commande : ajouter du stock, enregistrer une vente, changer un prix, ou demander ce qu’il reste.</div>
+    <div class="tw"><table>
+      <thead><tr><th>Produit</th><th>Stock</th><th>Prix</th></tr></thead>
+      <tbody id="tb"></tbody>
+    </table></div>
+    <div class="foot"><span>Ventes du jour : <b id="tot">0,00 DT</b></span><button id="reset" type="button">Réinitialiser la démo</button></div>
+  </div>
+</section>
+
+<section class="s" id="comment">
+  <h2 class="t">Trois étapes, aucune formation</h2>
+  <ol class="steps">
+    <li><h3>Vous parlez</h3><p>Une phrase en derja, en arabe ou en arabizi, depuis votre téléphone ou au comptoir.</p></li>
+    <li><h3>DerjaBiz comprend</h3><p>Il repère le produit, la quantité et l’action : ajouter, vendre, changer un prix ou consulter.</p></li>
+    <li><h3>Tout se met à jour</h3><p>Stock, ventes et prix sont à jour tout de suite, et vous êtes prévenu quand un produit va manquer.</p></li>
+  </ol>
+</section>
+
+<section class="s" id="phrases">
+  <h2 class="t">Ce que vous pouvez dire</h2>
+  <div class="rows">
+    <div class="row"><h3>Stock</h3><div class="say">زيد 20 كيلو طماطم<small>zid 20 kilo tomates</small></div><div class="res">Ajoute 20 kg au stock de tomates.</div></div>
+    <div class="row"><h3>Ventes</h3><div class="say">بعت 3 هريسة<small>b3t 3 harissa</small></div><div class="res">Retire 3 pots du stock et ajoute la vente à la caisse du jour.</div></div>
+    <div class="row"><h3>Prix</h3><div class="say">بدل سعر التمر 10 دينار<small>badel soum dattes 10</small></div><div class="res">Les dattes passent à 10 DT, partout, immédiatement.</div></div>
+    <div class="row"><h3>Question</h3><div class="say">قداش بقى زيت زيتون<small>9addech b9a zit zitoun</small></div><div class="res">Vous répond avec le stock et le prix actuels.</div></div>
+  </div>
+</section>
+
+<section class="s">
+  <p class="who">Pour les épiceries, boulangeries, cafés, boutiques et quincailleries tunisiennes qui veulent arrêter de compter sur des cahiers et des fichiers Excel.</p>
+</section>
+
+<section class="s" id="contact">
+  <div class="cta">
+    <div><h2>Voyez DerjaBiz dans votre commerce</h2><p>Dites-nous ce que vous vendez, nous préparons une démo avec vos produits.</p></div>
+    <div><a class="btn" href="https://wa.me/21600000000">WhatsApp</a> <a class="btn alt" href="mailto:contact@derjabiz.tn">contact@derjabiz.tn</a></div>
+  </div>
+</section>
+</main>
+<footer>© 2026 DerjaBiz. Fait en Tunisie.</footer>
+</div>
+
+<script>
+var DEF=[
+ {n:"Tomates",u:"kg",s:40,p:1.8,a:["tomates","tomate","tamatem","tmatem","طماطم"]},
+ {n:"Harissa",u:"pots",s:25,p:4.5,a:["harissa","hrissa","هريسة","هريسه"]},
+ {n:"Huile d’olive",u:"L",s:60,p:18,a:["zit zitoun","zitoun","zit","huile","زيت زيتون","زيت"]},
+ {n:"Dattes",u:"kg",s:30,p:9,a:["dattes","tmar","tamr","تمر"]}
+];
+var P=[],total=0;
+var EX=["زيد 20 كيلو طماطم","zid 10 kilo dattes","بعت 3 هريسة","b3t 5 kilo tomates","بدل سعر التمر 10 دينار","قداش بقى زيت زيتون"];
+var tb=document.getElementById("tb"),msg=document.getElementById("msg"),inp=document.getElementById("inp");
+
+function norm(s){
+ return s.toLowerCase().replace(/[\u064B-\u0652\u0640]/g,"").replace(/[\u0660-\u0669]/g,function(d){return "\u0660\u0661\u0662\u0663\u0664\u0665\u0666\u0667\u0668\u0669".indexOf(d)}).replace(/[أإآ]/g,"ا").replace(/ى/g,"ي").replace(/ة/g,"ه").replace(/,/g,".");
+}
+function fmt(n){return n.toFixed(2).replace(".",",")}
+function render(flash){
+ tb.innerHTML="";
+ P.forEach(function(p,i){
+  var tr=document.createElement("tr");if(i===flash)tr.className="flash";
+  var a=document.createElement("td");a.textContent=p.n;
+  var b=document.createElement("td");b.textContent=(Math.round(p.s*100)/100)+" "+p.u+(p.s<10?" (bas)":"");if(p.s<10)b.className="low";
+  var c=document.createElement("td");c.textContent=fmt(p.p)+" DT";
+  tr.appendChild(a);tr.appendChild(b);tr.appendChild(c);tb.appendChild(tr);
+ });
+ document.getElementById("tot").textContent=fmt(total)+" DT";
+}
+function reset(){
+ P=JSON.parse(JSON.stringify(DEF));total=0;render(-1);
+ msg.className="";msg.textContent="Démo réinitialisée.";
+}
+var W={wahed:1,zouz:2,thletha:3,tlata:3,arba3a:4,khamsa:5,sitta:6,seb3a:7,tmenya:8,ts3a:9,"3chra":10,"3chrin":20,واحد:1,زوز:2,ثلاثه:3,تلاته:3,اربعه:4,خمسه:5,سته:6,سبعه:7,ثمانيه:8,تسعه:9,عشره:10,عشرين:20};
+function num(t){
+ var m=t.match(/\d+(?:\.\d+)?/);if(m)return parseFloat(m[0]);
+ var w=t.split(/\s+/);for(var i=0;i<w.length;i++){if(W[w[i]])return W[w[i]]}
+ return null;
+}
+function has(t,list){return list.some(function(w){return t.indexOf(norm(w))>-1})}
+var V={
+ price:["soum","sou9","prix","ghayer","ghayyer","badel","badhel","thamen","سوم","سعر","ثمن","بدل","غير"],
+ sell:["b3t","ba3t","b3ina","bi3t","nbi3","vendu","بعت","بعنا","نبيع"],
+ add:["zid","zidli","zayed","ajout","7ot","jebt","wsel","زيد","زيدلي","حط","جبت","وصل"],
+ ask:["9addech","9adech","kadech","qaddech","chhal","combien","reste","b9a","قداش","شحال","بقى","بقات"]
+};
+function run(raw){
+ var t=norm(raw.trim());if(!t)return;
+ var idx=-1,best=0;
+ P.forEach(function(p,i){p.a.forEach(function(a){a=norm(a);if(t.indexOf(a)>-1&&a.length>best){best=a.length;idx=i}})});
+ var q=num(t),p=P[idx],ok=true,out="";
+ if(idx<0){ok=false;out="Je n’ai pas reconnu le produit. Essayez : tomates, harissa, zit zitoun ou dattes."}
+ else if(has(t,V.ask)){out=p.n+" : il reste "+(Math.round(p.s*100)/100)+" "+p.u+" à "+fmt(p.p)+" DT."}
+ else if(has(t,V.price)){
+  if(q===null){ok=false;out="Quel est le nouveau prix de "+p.n+" ?"}
+  else{p.p=q;out="Prix mis à jour : "+p.n+" à "+fmt(q)+" DT."}
+ }
+ else if(has(t,V.sell)){
+  var n=q===null?1:q;
+  if(n>p.s){ok=false;out="Stock insuffisant : il reste seulement "+p.s+" "+p.u+" de "+p.n+"."}
+  else{p.s-=n;total+=n*p.p;out="Vente enregistrée : "+n+" "+p.u+" de "+p.n+" = "+fmt(n*p.p)+" DT."}
+ }
+ else if(has(t,V.add)){
+  if(q===null){ok=false;out="Quelle quantité de "+p.n+" faut-il ajouter ?"}
+  else{p.s+=q;out="Stock mis à jour : +"+q+" "+p.u+" de "+p.n+". Total : "+(Math.round(p.s*100)/100)+" "+p.u+"."}
+ }
+ else{ok=false;out="Action non reconnue. Dites par exemple : زيد, بعت, بدل سعر ou قداش بقى."}
+ msg.className=ok?"ok":"err";msg.textContent=out;render(ok?idx:-1);
+}
+document.getElementById("go").addEventListener("click",function(){run(inp.value)});
+inp.addEventListener("keydown",function(e){if(e.key==="Enter")run(inp.value)});
+document.getElementById("reset").addEventListener("click",reset);
+var ch=document.getElementById("chips");
+EX.forEach(function(x){var b=document.createElement("button");b.type="button";b.textContent=x;b.dir="auto";b.addEventListener("click",function(){inp.value=x;run(x)});ch.appendChild(b)});
+
+var mic=document.getElementById("mic"),SR=window.SpeechRecognition||window.webkitSpeechRecognition,rec=null;
+mic.addEventListener("click",function(){
+ if(!SR){msg.className="err";msg.textContent="La reconnaissance vocale n’est pas disponible sur ce navigateur. Écrivez la commande ou utilisez Chrome.";return}
+ if(rec){rec.stop();return}
+ rec=new SR();rec.lang="ar-TN";rec.interimResults=false;
+ rec.onstart=function(){mic.classList.add("on");msg.className="";msg.textContent="Je vous écoute…"};
+ rec.onresult=function(e){var s=e.results[0][0].transcript;inp.value=s;run(s)};
+ rec.onerror=function(){msg.className="err";msg.textContent="Je n’ai pas pu vous entendre. Vérifiez l’accès au micro et réessayez."};
+ rec.onend=function(){mic.classList.remove("on");rec=null};
+ rec.start();
+});
+reset();msg.textContent="Dites une commande : ajouter du stock, enregistrer une vente, changer un prix, ou demander ce qu’il reste.";
+</script>
+</body>
+</html>
